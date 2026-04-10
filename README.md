@@ -4,6 +4,8 @@ A lightweight Chrome Extension designed to streamline the process of capturing a
 
 ## 🚀 Features
 
+- **Auto-Enable Captions:** Automatically clicks the "Turn on captions" button as soon as you join a meeting.
+- **Lock Captions:** Prevents accidental deactivation by disabling the "Turn off captions" button in the Google Meet interface.
 - **Quick Copy:** One-click extraction of current meeting captions.
 - **Manual Select:** Precisely choose which parts of the meeting history to capture.
 - **Custom Prompts:** Pre-configure prompts in both English and Vietnamese to automatically wrap your captured text.
@@ -22,10 +24,10 @@ Since this extension is in development, you can install it manually:
 ## 📖 How to Use
 
 1.  Start or join a **Google Meet** call.
-2.  **Enable Captions** in Google Meet (this is required for the extension to "see" the text).
-3.  Click the **Meeting Take Note** icon in your browser toolbar.
-4.  Choose your preferred language (EN/VI) and customize your prompt if needed.
-5.  Click **Quick Copy** to grab everything or **Manual Select** to pick a specific area.
+2.  The extension will **automatically enable captions** for you (if not already active).
+3.  Open the **Meeting Take Note** popup from your browser toolbar.
+4.  (Optional) Check **"Lock Captions"** to ensure they stay on during the entire meeting.
+5.  Choose your language (EN/VI) and click **Quick Copy** or **Manual Select**.
 6.  The formatted prompt + captions are now in your clipboard—just paste them into your favorite LLM!
 
 ## 🔧 Configuration
