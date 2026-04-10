@@ -1,0 +1,7 @@
+.meeting-note-picker-highlight {
+  outline: 3px solid #1a73e8 !important;
+  outline-offset: -3px !important;
+  cursor: crosshair !important;
+  background-color: rgba(26, 115, 232, 0.1) !important;
+  transition: outline 0.1s, background-color 0.1s;
+}

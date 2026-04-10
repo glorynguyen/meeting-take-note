@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Meeting Take Note",
+  "version": "1.0",
+  "description": "Select and copy Google Meet captions for LLM processing.",
+  "permissions": ["activeTab", "scripting", "clipboardWrite"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": ["content.js"],
+      "css": ["content.css"]
+    }
+  ]
+}
