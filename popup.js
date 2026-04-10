@@ -8,13 +8,15 @@ const promptLabel = document.getElementById('promptLabel');
 const status = document.getElementById('status');
 const quickBtn = document.getElementById('quickCopy');
 const manualBtn = document.getElementById('startPicker');
+const lockCheckbox = document.getElementById('lockCaptions');
 const tabs = document.querySelectorAll('.tab');
 
 let currentLang = 'en';
 
 // Load initial state
-chrome.storage.local.get(['currentLang', 'prompt_en', 'prompt_vi'], (result) => {
+chrome.storage.local.get(['currentLang', 'prompt_en', 'prompt_vi', 'lockCaptions'], (result) => {
   currentLang = result.currentLang || 'en';
+  lockCheckbox.checked = !!result.lockCaptions;
   updateUI(currentLang, result);
 });
 
@@ -50,6 +52,11 @@ tabs.forEach(tab => {
 promptInput.addEventListener('input', () => {
   const saveKey = `prompt_${currentLang}`;
   chrome.storage.local.set({ [saveKey]: promptInput.value });
+});
+
+// Save lock setting
+lockCheckbox.addEventListener('change', () => {
+  chrome.storage.local.set({ lockCaptions: lockCheckbox.checked });
 });
 
 async function copyToClipboard(html) {

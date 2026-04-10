@@ -1,3 +1,65 @@
+let lockCaptionsEnabled = false;
+
+// Load initial lock setting
+chrome.storage.local.get(['lockCaptions'], (result) => {
+  lockCaptionsEnabled = !!result.lockCaptions;
+  applyLock();
+});
+
+// Listen for storage changes
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.lockCaptions) {
+    lockCaptionsEnabled = changes.lockCaptions.newValue;
+    applyLock();
+  }
+});
+
+function applyLock() {
+  const turnOffButton = document.querySelector('button[aria-label="Turn off captions"], [aria-label="Turn off captions (c)"]');
+  if (lockCaptionsEnabled && turnOffButton) {
+    turnOffButton.disabled = true;
+    turnOffButton.style.opacity = '0.5';
+    turnOffButton.title = "Captions are locked by Meeting Take Note";
+  } else if (!lockCaptionsEnabled && turnOffButton) {
+    turnOffButton.disabled = false;
+    turnOffButton.style.opacity = '1';
+    turnOffButton.title = "";
+  }
+}
+
+function autoEnableCaptions() {
+  const turnOnButton = document.querySelector('button[aria-label="Turn on captions"], [aria-label="Turn on captions (c)"]');
+  if (turnOnButton) {
+    console.log('Meeting Take Note: Enabling captions...');
+    turnOnButton.click();
+    // Re-apply lock after a short delay to catch the button state change
+    setTimeout(applyLock, 500);
+    return true;
+  }
+  return false;
+}
+
+// Observer: Stops after the first successful click
+const observer = new MutationObserver(() => {
+  if (autoEnableCaptions()) {
+    console.log('Meeting Take Note: Captions enabled, stopping observer.');
+    observer.disconnect();
+  }
+});
+
+observer.observe(document.body, {
+  childList: true,
+  subtree: true
+});
+
+// Initial run
+if (autoEnableCaptions()) {
+  observer.disconnect();
+} else {
+  applyLock();
+}
+
+// --- Selection Logic ---
 let isPicking = false;
 let lastElement = null;
 
@@ -14,10 +76,8 @@ function captureElement(e) {
   if (!isPicking) return;
   e.preventDefault();
   e.stopPropagation();
-  
   const rawHtml = e.target.innerHTML || '';
   chrome.runtime.sendMessage({ action: "manual_picked_html", html: rawHtml });
-  
   stopPicking();
 }
 
