@@ -3,43 +3,26 @@ let lastElement = null;
 
 function highlightElement(e) {
   if (!isPicking) return;
-  
-  if (lastElement) {
-    lastElement.classList.remove('meeting-note-picker-highlight');
-  }
-  
+  if (lastElement) lastElement.classList.remove('meeting-note-picker-highlight');
   lastElement = e.target;
   lastElement.classList.add('meeting-note-picker-highlight');
   e.stopPropagation();
   e.preventDefault();
 }
 
-async function captureElement(e) {
+function captureElement(e) {
   if (!isPicking) return;
-  
   e.preventDefault();
   e.stopPropagation();
   
-  const selectedElement = e.target;
-  const rawText = selectedElement.innerText || '';
-  
-  const prompt = `Please summarize the following meeting notes and extract key action items:\n\n---\n${rawText}\n---`;
-  
-  try {
-    await navigator.clipboard.writeText(prompt);
-    alert('Prompt copied to clipboard!');
-  } catch (err) {
-    console.error('Failed to copy: ', err);
-    alert('Failed to copy. Please try again.');
-  }
+  const rawHtml = e.target.innerHTML || '';
+  chrome.runtime.sendMessage({ action: "manual_picked_html", html: rawHtml });
   
   stopPicking();
 }
 
 function handleEscape(e) {
-  if (e.key === 'Escape') {
-    stopPicking();
-  }
+  if (e.key === 'Escape') stopPicking();
 }
 
 function startPicking() {
@@ -66,5 +49,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "start_picker") {
     startPicking();
     sendResponse({status: "started"});
+  } else if (request.action === "get_quick_html") {
+    const captionsElement = document.querySelector('div[aria-label="Captions"]');
+    if (captionsElement) {
+      sendResponse({success: true, html: captionsElement.innerHTML});
+    } else {
+      sendResponse({success: false, message: "Captions area not found!"});
+    }
   }
 });

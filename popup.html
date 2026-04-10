@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
     <style>
-      body { width: 150px; padding: 10px; font-family: sans-serif; }
-      button { width: 100%; padding: 8px; cursor: pointer; }
+      body { width: 280px; padding: 12px; font-family: -apple-system, sans-serif; }
+      h3 { margin-top: 0; font-size: 14px; color: #5f6368; }
+      
+      .lang-tabs { display: flex; gap: 4px; margin-bottom: 8px; border-bottom: 1px solid #dadce0; padding-bottom: 4px; }
+      .tab { 
+        padding: 4px 12px; cursor: pointer; font-size: 11px; border-radius: 4px 4px 0 0;
+        border: 1px solid transparent; color: #70757a;
+      }
+      .tab.active { border: 1px solid #dadce0; border-bottom-color: white; margin-bottom: -5px; color: #1a73e8; font-weight: bold; }
+      
+      label { font-size: 11px; color: #70757a; display: block; margin-bottom: 4px; }
+      textarea { 
+        width: 100%; height: 100px; padding: 6px; box-sizing: border-box; 
+        font-size: 12px; border: 1px solid #dadce0; border-radius: 4px; resize: none;
+      }
+      .btn-group { display: flex; gap: 8px; margin-top: 10px; }
+      button { 
+        flex: 1; padding: 10px; cursor: pointer;
+        border: none; border-radius: 4px; font-weight: 500; font-size: 12px;
+      }
+      #quickCopy { background-color: #1a73e8; color: white; }
+      #quickCopy:hover { background-color: #1765cc; }
+      #startPicker { background-color: #f1f3f4; color: #3c4043; border: 1px solid #dadce0; }
+      #startPicker:hover { background-color: #e8eaed; }
+      
+      #status { font-size: 11px; color: #1e8e3e; margin-top: 8px; min-height: 14px; }
+      .hint { font-size: 10px; color: #9aa0a6; margin-top: 4px; }
     </style>
   </head>
   <body>
     <h3>Meeting Note</h3>
-    <button id="startPicker">Select & Copy</button>
-    <p id="status" style="font-size: 11px; color: green;"></p>
+    
+    <div class="lang-tabs">
+      <div id="tab-en" class="tab active" data-lang="en">English</div>
+      <div id="tab-vi" class="tab" data-lang="vi">Tiếng Việt</div>
+    </div>
+
+    <label id="promptLabel">Custom Prompt (EN):</label>
+    <textarea id="promptInput" placeholder="Enter your prompt... Use {{text}} for the captions."></textarea>
+    <div class="hint">Use <b>{{text}}</b> for captions.</div>
+    
+    <div class="btn-group">
+      <button id="quickCopy">Quick Copy</button>
+      <button id="startPicker">Manual Select</button>
+    </div>
+    
+    <p id="status"></p>
     <script src="popup.js"></script>
   </body>
 </html>
