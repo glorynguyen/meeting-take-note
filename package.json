@@ -18,11 +18,11 @@
   "license": "MIT",
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^9.2.1",
     "@semantic-release/npm": "^11.0.1",
     "bestzip": "^2.2.1",
-    "@semantic-release/exec": "^6.0.3",
     "semantic-release": "^22.0.8"
   },
   "release": {
@@ -37,6 +37,12 @@
         "@semantic-release/npm",
         {
           "npmPublish": false
+        }
+      ],
+      [
+        "@semantic-release/exec",
+        {
+          "prepareCmd": "npm run version:sync && npm run zip"
         }
       ],
       [
@@ -62,17 +68,6 @@
           ]
         }
       ]
-    ],
-    "prepare": [
-      "@semantic-release/changelog",
-      {
-        "path": "@semantic-release/npm",
-        "npmPublish": false
-      },
-      {
-        "path": "@semantic-release/exec",
-        "cmd": "npm run version:sync && npm run zip"
-      }
     ]
   }
 }
