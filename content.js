@@ -2,7 +2,7 @@ let lockCaptionsEnabled = false;
 let captionsAutoEnabled = false;
 let leaveListenerAdded = false;
 
-// Load initial lock setting
+// Load initial settings
 chrome.storage.local.get(['lockCaptions'], (result) => {
   lockCaptionsEnabled = !!result.lockCaptions;
   applyLock();
@@ -33,10 +33,8 @@ function autoEnableCaptions() {
   if (captionsAutoEnabled) return true;
   const turnOnButton = document.querySelector('button[aria-label="Turn on captions"], [aria-label="Turn on captions (c)"]');
   if (turnOnButton) {
-    console.log('Meeting Take Note: Enabling captions...');
     turnOnButton.click();
     captionsAutoEnabled = true;
-    // Re-apply lock after a short delay to catch the button state change
     setTimeout(applyLock, 500);
     return true;
   }
@@ -62,7 +60,6 @@ async function autoCopyOnLeave() {
 
   const html = captionsElement.innerHTML;
   
-  // Get settings from storage
   chrome.storage.local.get(['currentLang', 'prompt_en', 'prompt_vi'], async (result) => {
     const lang = result.currentLang || 'en';
     const template = result[`prompt_${lang}`] || (lang === 'en' ? 
@@ -76,26 +73,21 @@ async function autoCopyOnLeave() {
       finalPrompt = template + "\n\n" + html;
     }
 
-    // Save to storage as backup
     chrome.storage.local.set({ 
       lastMeetingNote: finalPrompt,
       lastMeetingDate: new Date().toISOString()
     });
     
-    // Also save to history
     await saveToHistory(finalPrompt);
 
-    // Try to copy to clipboard (this might work since it's triggered by a user click)
     try {
       await navigator.clipboard.writeText(finalPrompt);
-      console.log('Meeting Take Note: Auto-copied captions on leave.');
     } catch (err) {
-      console.error('Meeting Take Note: Auto-copy failed:', err);
+      // Silently fail in production
     }
   });
 }
 
-// Watch for the Leave Call button
 function setupLeaveButtonListener() {
   if (leaveListenerAdded) return true;
   const leaveBtn = document.querySelector('button[aria-label="Leave call"]');
@@ -107,7 +99,6 @@ function setupLeaveButtonListener() {
   return false;
 }
 
-// Extra safety: save to storage on tab close (clipboard copy won't work here)
 window.addEventListener('beforeunload', async () => {
   const captionsElement = document.querySelector('div[aria-label="Captions"]');
   if (!captionsElement) return;
@@ -135,7 +126,6 @@ window.addEventListener('beforeunload', async () => {
   });
 });
 
-// Throttled observer to avoid performance issues on high-activity pages
 let timeoutId = null;
 const observer = new MutationObserver(() => {
   if (timeoutId) return;
@@ -144,9 +134,7 @@ const observer = new MutationObserver(() => {
     const capsDone = autoEnableCaptions();
     const leaveDone = setupLeaveButtonListener();
     
-    // If everything is set up, we can stop observing
     if (capsDone && leaveDone) {
-      console.log('Meeting Take Note: All elements found, stopping observer.');
       observer.disconnect();
     }
     
@@ -159,7 +147,6 @@ observer.observe(document.body, {
   subtree: true
 });
 
-// Initial run
 autoEnableCaptions();
 setupLeaveButtonListener();
 applyLock();

@@ -130,7 +130,7 @@ promptInput.addEventListener('input', () => {
   chrome.storage.local.set({ [saveKey]: promptInput.value });
 });
 
-// Save lock setting
+// Save settings
 lockCheckbox.addEventListener('change', () => {
   chrome.storage.local.set({ lockCaptions: lockCheckbox.checked });
 });
@@ -144,7 +144,6 @@ restoreLastBtn.addEventListener('click', async () => {
         saveToHistory(result.lastMeetingNote);
         setTimeout(() => window.close(), 1000);
       } catch (err) {
-        console.error('Restore failed: ', err);
         status.innerText = "Restore failed.";
       }
     }
@@ -167,7 +166,6 @@ async function copyToClipboard(html) {
     saveToHistory(finalPrompt);
     setTimeout(() => window.close(), 1000);
   } catch (err) {
-    console.error('Copy failed: ', err);
     status.innerText = "Copy failed. Try again.";
   }
 }
