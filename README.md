@@ -7,6 +7,7 @@ A lightweight Chrome Extension designed to streamline the process of capturing a
 - **Auto-Enable Captions:** Automatically clicks the "Turn on captions" button as soon as you join a meeting.
 - **Lock Captions:** Prevents accidental deactivation by disabling the "Turn off captions" button in the Google Meet interface.
 - **Quick Copy:** One-click extraction of current meeting captions.
+- **Auto-Copy & Restore:** Automatically captures captions when you click "Leave call" and allows restoring the last session from the popup if you forget to copy.
 - **Manual Select:** Precisely choose which parts of the meeting history to capture.
 - **Custom Prompts:** Pre-configure prompts in both English and Vietnamese to automatically wrap your captured text.
 - **Dynamic Template:** Use the `{{text}}` placeholder in your prompts to define exactly where the captions should be inserted.

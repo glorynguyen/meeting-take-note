@@ -38,23 +38,47 @@
     <div class="lang-tabs">
       <div id="tab-en" class="tab active" data-lang="en">English</div>
       <div id="tab-vi" class="tab" data-lang="vi">Tiếng Việt</div>
+      <div id="tab-history" class="tab" data-lang="history" style="margin-left: auto; border-radius: 4px 4px 0 0;">History</div>
     </div>
 
-    <label id="promptLabel">Custom Prompt (EN):</label>
-    <textarea id="promptInput" placeholder="Enter your prompt... Use {{text}} for the captions."></textarea>
-    <div class="hint">Use <b>{{text}}</b> for captions.</div>
-    
-    <div class="btn-group">
-      <button id="quickCopy">Quick Copy</button>
-      <button id="startPicker">Manual Select</button>
+    <div id="promptSection">
+      <label id="promptLabel">Custom Prompt (EN):</label>
+      <textarea id="promptInput" placeholder="Enter your prompt... Use {{text}} for the captions."></textarea>
+      <div class="hint">Use <b>{{text}}</b> for captions.</div>
+      
+      <div class="btn-group">
+        <button id="quickCopy">Quick Copy</button>
+        <button id="startPicker">Manual Select</button>
+      </div>
+
+      <div id="lastMeetingContainer" style="display: none; margin-top: 10px;">
+        <button id="restoreLast" style="background-color: #fce8e6; color: #d93025; border: 1px solid #f8d7da; padding: 6px; font-size: 11px;">Restore Last Meeting</button>
+      </div>
+
+      <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px;">
+        <input type="checkbox" id="lockCaptions" style="width: auto; height: auto; margin: 0;">
+        <label for="lockCaptions" style="margin-bottom: 0; cursor: pointer;">Lock Captions (Stay ON)</label>
+      </div>
     </div>
 
-    <div style="margin-top: 12px; display: flex; align-items: center; gap: 6px;">
-      <input type="checkbox" id="lockCaptions" style="width: auto; height: auto; margin: 0;">
-      <label for="lockCaptions" style="margin-bottom: 0; cursor: pointer;">Lock Captions (Stay ON)</label>
+    <div id="historySection" style="display: none;">
+      <div id="historyList" style="max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;">
+        <!-- History items will be injected here -->
+        <p class="hint" style="text-align: center; margin-top: 20px;">No history yet.</p>
+      </div>
+      <button id="clearHistory" style="width: 100%; margin-top: 12px; padding: 6px; font-size: 11px; background: none; border: 1px solid #dadce0; color: #d93025; cursor: pointer; border-radius: 4px;">Clear History</button>
     </div>
     
     <p id="status"></p>
+
+    <style>
+      .history-item {
+        border: 1px solid #dadce0; border-radius: 4px; padding: 8px; cursor: pointer; transition: background 0.2s;
+      }
+      .history-item:hover { background-color: #f8f9fa; }
+      .history-date { font-size: 10px; color: #70757a; margin-bottom: 4px; }
+      .history-preview { font-size: 11px; color: #3c4043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    </style>
     <script src="popup.js"></script>
   </body>
 </html>
